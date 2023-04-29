@@ -16,13 +16,17 @@ colorama.init(autoreset = True)
 
 reader = easyocr.Reader(['en'])
 
-image_location = 'test.png'
+image_location = str(input("Type the location of the image: "))
 extracted_text = reader.readtext(image_location, detail = 0, paragraph = 0)
 text_str = ""
 
 for i in extracted_text:
 		text_str += i
 		text_str += '\n'
+
+fo = open("extracted_text.txt", "w")
+fo.write(text_str)
+fo.close()
 
 def IsItCorrect(word):
 	if word == 'i': return 0
@@ -76,7 +80,7 @@ def test_student(study_material, question_amount = 3):
 		ind = random.randrange(0, len(summary_words))
 		cur_word = summary_words[ind].lower().strip(',').strip('.').strip('\'')
 
-		not_important = ['such', 'of', 'and', 'or', 'as', 'the', 'in', 'at', 'on', 'into', 'a', 'who', 'where', 'which', 'what', 'why']
+		not_important = ['also', 'is', 'are', 'am', 'such', 'of', 'and', 'or', 'as', 'the', 'in', 'at', 'on', 'into', 'a', 'who', 'where', 'which', 'what', 'why']
 
 		if cur_word not in not_important:
 			words_to_ask.update({ind: cur_word})
@@ -167,8 +171,9 @@ def YesOrNo(message):
 		answer = input(message)
 		if answer.lower() == "yes" or answer.lower() == "y":
 			return True
-		
-	return False
+		elif answer.lower() == "no" or answer.lower() == "n":
+			return False
+
 
 def main():
 		
@@ -188,11 +193,13 @@ def main():
 
 		print(f"For the best results, you will be given {h} hours : {m} minutes : {s} seconds")
 
-		YesOrNo("Do you want to start [Yes/No]: ")
+		if YesOrNo("Do you want to start [Yes/No]: ") == False:
+			break
 		
 		Timer(0, 0, 5)
 
-		YesOrNo("Are you ready to take a test? [Yes/No]: ")
+		if YesOrNo("Are you ready to take a test? [Yes/No]: ") == False:
+			break
 
 		result = test_student(study_material)
 
